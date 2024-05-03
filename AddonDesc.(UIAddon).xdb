@@ -10,7 +10,7 @@
 		<Item href="Libs/Utils.lua"/>
 		<Item href="Libs/Widget.lua"/>
 		<Item href="locales.lua"/>
-		<Item href="Script.luac"/>
+		<Item href="Script.luac"/> 
 		<!-- <Item href="SourceCode.lua"/> -->
     </ScriptFileRefs>
 	<localizedNameFileRef href="name.txt"/>

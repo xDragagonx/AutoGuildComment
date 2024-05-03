@@ -2,14 +2,8 @@ function Main()
 	common.RegisterEventHandler(EVENT_GUILD_DECLINE_BUSY, "EVENT_GUILD_DECLINE_BUSY") --https://alloder.pro/md/LuaApi/EventGuildDeclineBusy.html
 	common.RegisterEventHandler(EVENT_GUILD_DECLINE_IGNORED, "EVENT_GUILD_DECLINE_IGNORED") --https://alloder.pro/md/LuaApi/EventGuildDeclineIgnored.html
 	common.RegisterEventHandler(EVENT_GUILD_MEMBER_ADDED, "EVENT_GUILD_MEMBER_ADDED") --https://alloder.pro/md/LuaApi/EventGuildMemberAdded.html
-	common.RegisterEventHandler(EVENT_TALK_STARTED, "EVENT_TALK_STARTED") --https://alloder.pro/md/LuaApi/EventTalkStarted.html
 end
 
-function EVENT_TALK_STARTED()
-	if mailBox.IsInteracting() then --https://alloder.pro/md/LuaApi/FunctionMailBoxIsInteracting.html
-		mailBox.Open()
-	end
-end
 function EVENT_GUILD_DECLINE_BUSY(params) --Sent if an invitation to a guild fails (the player is busy). 
 	chat(2, "failed to invite",params,"to the guild. reason: busy")
 

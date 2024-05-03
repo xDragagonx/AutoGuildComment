@@ -1,4 +1,12 @@
 --------------------------------------------------------------------------------
+-- How to use 
+--------------------------------------------------------------------------------
+--[[
+chat(1-4 [message,notice,warning,error - message type],...[to Log on Chat]) or SimpleChat(1-4 [message,notice,warning,error - message type],...[to Log on Chat])
+CustomChat(message, color, fontSize)
+LogInfo(... [to Log in mods.txt])
+]]
+--------------------------------------------------------------------------------
 -- ScriptAdvancedToString 
 --------------------------------------------------------------------------------
 local tostrlib = {}
@@ -150,7 +158,7 @@ end
 --------------------------------------------------------------------------------
 local function widgettostring( widget )
 	local apitype = apitype( widget )
-	return s_format( "%s: %s [[%s]]: \"%s\"", apitype, s_sub( tostring( widget ), -8 ), widget:__towatch(), GetFullName( widget ) )
+	return s_format( "%s: %s: \"%s\"", apitype, s_sub( tostring( widget ), -8 ), GetFullName( widget ) )
 end
 --------------------------------------------------------------------------------
 tostrlib[ "FormSafe" ] = widgettostring
@@ -226,19 +234,18 @@ end
 function chat(...) return SimpleChat(...) end
 
 --------------------------------------------------------------------------------
--- 
+-- CustomChat
 --------------------------------------------------------------------------------
 local wtChat = nil
 local chatRows = 0
 local GlobalFontSize = 14
-local ChatPrefix = common.GetAddonName()
+local ADDON_NAME = common.GetAddonName()
 
 local function LocateChat()
 	
 	if not wtChat then
 		local w = stateMainForm:GetChildUnchecked("ChatLog", false)
 		if not w then
-			--- ������ ����� �� ������� - ������ �� �������
 			w = stateMainForm:GetChildUnchecked("Chat", true)
 		else
 			w = w:GetChildUnchecked("Container", true) -- w = w:GetChildUnchecked("Chat", true);
@@ -266,7 +273,7 @@ function CustomChat(message, color, fontSize)
 		valuedText:SetClassVal( "color", "LogColorYellow" )
 	end
 
-	message = ChatPrefix .. ': '.. message;
+	message = ADDON_NAME .. ': '.. message;
 	if not common.IsWString( message ) then 
 		message = userMods.ToWString(message) 
 	end
@@ -276,7 +283,7 @@ function CustomChat(message, color, fontSize)
 	wtChat:PushFrontValuedText( valuedText )
 end
 	
---- call by "EVENT_SECOND_TIMER" - for clear messages from chat
+--- call "EVENT_SECOND_TIMER" to clear messages from chat
 function ClearChat( size )
 	for i=1, size or math.ceil( chatRows / 30 ) + 1 do
 	if chatRows < 1 then break end
@@ -287,7 +294,6 @@ end
 --------------------------------------------------------------------------------
 --LogToMods.txt
 --------------------------------------------------------------------------------
-local ADDON_NAME = common.GetAddonName()
 local t_insert = table.insert
 --------------------------------------------------------------------------------
 local function argtostringLog( arg )
