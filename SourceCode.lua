@@ -13,7 +13,7 @@ function EVENT_GUILD_DECLINE_IGNORED(params) --Notification about the impossibil
 
 end
 function EVENT_GUILD_MEMBER_ADDED(params) --Sent if a player has been added to the main player's guild. 
-	chat(2, params.name,"was added to the guild. guildmemberid:",params.id)
+	--chat(2, params.name,"was added to the guild. guildmemberid:",params.id)
 	local memberInfo = guild.GetMemberInfo(params.id) --https://alloder.pro/md/LuaApi/FunctionGuildGetMemberInfo.html
 
 	--Automatically changes guild rank depending whether max level or not.
