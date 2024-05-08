@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <UIAddon>
-	<Name>AutoGuildComment</Name>
+	<Name>GuildBot</Name>
 	<AutoStart>true</AutoStart>
 	<ScriptFileRefs>
 		<Item href="Libs/LibDnD.lua"/>
