@@ -142,7 +142,7 @@ function SpamGuildMessage() --Function will run a timer and spam the guild messa
 	--chat(2, "seconds:", seconds) --Logs the time passed.
 	common.LogInfo("common","-"..seconds.."-")
 	seconds = seconds + 1 --Makes time add up.
-	if seconds == 1 or seconds == 60 or seconds == 120 then --Determines after how many seconds the guild messages gets repeated.
+	if seconds == 1 or seconds == 20*60 or seconds == 40*60 then --Determines after how many seconds the guild messages gets repeated. *60 for minutes.
 		if spamMessageCounter > 0 then --Checks when to end repeating the guild message.
 			guild.SetMessage(currentGuildMessage.."\nThis message will be repeated "..spamMessageCounter.." more time(s).") --Sets the guild message with information about how many more times it'll be repeated.
 		elseif spamMessageCounter == 0 then --Checks if it has to be repeated again, if not, then it will post the message a last time, without informing how many more times it will be repeated.
