@@ -3,6 +3,13 @@
 --informs when you failed to ginv ppl by ignorance or afk.
 --adds guildMessage when guild levelled up to celebrate with guild.
 --adds guildMessage announcement when dominions are about to start, and repeats it several times over an hour
+-------------------------------------------
+-- WIDGET
+local wtButton = mainForm:GetChildChecked("Button",false)
+wtButton:SetVal("button_label", userMods.ToWString("Copy guild recruitment message"))
+wtButton:Show(false)
+
+-------------------------------------------
 local avatarId = nil
 local avatarName = nil
 local getAvatarIdCount = 0 --Used for counting how often it reloaded the function to assign an Id to the avatar.
@@ -11,6 +18,10 @@ local previousGuildMessage = nil --Placeholder for the previous guild's daily me
 local currentGuildMessage = nil --Placeholder for the current guild's daily message.
 local seconds = 0
 local spamMessageCounter = 2
+local recruitCooldown = 10 --(1.5h 5400)
+Global("guildRecruitmentMessage", nil)
+Global("reminderCooldown", 15) --15 is never used, was necesarry to avoid error.
+
 function Main()
 	if avatar.IsExist then --Makes sure we get the id and name of the avatar (addon user).
 		avatarId = avatar.GetId()
@@ -19,6 +30,8 @@ function Main()
 		GetAvatarId()
 	end
 	--GetEventsId()
+	--ChangeGUI()
+	Currencies()
 	common.RegisterEventHandler(EVENT_GUILD_DECLINE_BUSY, "EVENT_GUILD_DECLINE_BUSY") --https://alloder.pro/md/LuaApi/EventGuildDeclineBusy.html
 	common.RegisterEventHandler(EVENT_GUILD_DECLINE_IGNORED, "EVENT_GUILD_DECLINE_IGNORED") --https://alloder.pro/md/LuaApi/EventGuildDeclineIgnored.html
 	common.RegisterEventHandler(EVENT_GUILD_MEMBER_ADDED, "EVENT_GUILD_MEMBER_ADDED") --https://alloder.pro/md/LuaApi/EventGuildMemberAdded.html
@@ -29,16 +42,24 @@ function Main()
 	--common.RegisterEventHandler(EVENT_MISSION_RULE_REMOVED, "EVENT_MISSION_RULE_REMOVED") --https://alloder.pro/md/LuaApi/EventMissionRuleAdded.html Only works when daily reset removes calendar event
 	--common.RegisterEventHandler(EVENT_NEWS_POST_LOADED, "EVENT_NEWS_POST_LOADED") --https://alloder.pro/md/LuaApi/EventNewsPostLoaded.html Seems to not work for now. Awaiting feedback from Lafayette
 	--common.RegisterEventHandler(EVENT_NEWS_POST_SELECTED, "EVENT_NEWS_POST_SELECTED") --https://alloder.pro/md/LuaApi/EventNewsPostSelected.html Seems to not work for now. Awaiting feedback from Lafayette
+	--RecruitmentReminderTimer()	
+	DnD.Init(wtButton, nil, true)
 end
-function EVENT_NEWS_POST_SELECTED(params)
-	ruleId = params.ruleId
-	local calendarEventId = rules.GetEventByRuleId( ruleId )
-	local calendarEventInfo = rules.GetEventInfo( calendarEventId )
-	chat(3, "selected post:", calendarEventInfo.name, calendarEventId)
+-- function EVENT_NEWS_POST_SELECTED(params)
+-- 	ruleId = params.ruleId
+-- 	local calendarEventId = rules.GetEventByRuleId( ruleId )
+-- 	local calendarEventInfo = rules.GetEventInfo( calendarEventId )
+-- 	chat(3, "selected post:", calendarEventInfo.name, calendarEventId)
+-- end
+-- function EVENT_NEWS_POST_LOADED(params)
+-- 	chat(3, "hello", params.ruleId)
+-- end
+function ChangeGUI()
+	chat(2, "changing GUI")
+	
+	chat(2, "I haven't crashed yet")
 end
-function EVENT_NEWS_POST_LOADED(params)
-	chat(3, "hello", params.ruleId)
-end
+
 function GetEventsId()
 	-- local newDailyMessage = userMods.ToWString("\nDear Avarice gamers,\nDominions are starting in less than 1 hour. Please prepare the following:\nPvP food of 10%'s | 3x3 vendor\nAlchemy potions +50 | Alchemy or playertrading, check Auction House\nPotents +40 | 3x3 vendor, Relic Master NPC\nMana Batteries | 3x3 vendor\nLegendary or Fabled Dragon Tears | Embrium vendor in Private Allod or at Auction House")
 	-- guild.SetMessage(newDailyMessage)
@@ -76,7 +97,6 @@ function GetEventsId()
 		-- end
 	end
 end
-
 function EVENT_GUILD_DECLINE_BUSY(params) --Sent if an invitation to a guild fails (the player is busy).
 	local declinerName = userMods.FromWString(params.declinerName)
 	chat(2, "failed to invite",declinerName,"to the guild. reason: busy")
@@ -213,7 +233,103 @@ function ReturnGuildMessage()
 	else
 		chat(2, "No daily message stored to put back.")
 	end
+end
+-- I STOPPED HERE LKFNKDJSBGDJSBFJLDBFJLSNGFKJSDNGJLSDGNJKSGN;JSGNDJSGNSDGJSJGSDNJK
+
+function RecruitmentReminderTimer()
+	if recruitCooldown > 0 then
+	common.RegisterEventHandler(RecruitTimer, "EVENT_SECOND_TIMER") --https://alloder.pro/md/LuaApi/EventSecondTimer.html
+	elseif recruitCooldown <= 0 then
+		common.UnRegisterEventHandler(RecruitTimer, "EVENT_SECOND_TIMER")
+		chat(2, "recruitCooldown ready")
+		--Make button appear.
+		wtButton:Show(true)
+		recruitCooldown = reminderCooldown
+		common.RegisterReactionHandler( LeftClick, "LeftClick" )
+		--wtButton:SetClassVal( "button_style", "button_red" )		
+	end
+end
+function RecruitTimer()
+	chat(2, "recruitCooldown is", recruitCooldown)
+	if recruitCooldown <= 0 then RecruitmentReminderTimer() end
+	recruitCooldown = recruitCooldown - 1
+end
+-- function CheckZoneName()
+-- 	local zoneName = nil
+-- 	local zoneInfo = cartographer.GetCurrentZoneInfo()
+-- 	if zoneInfo then
+-- 		zoneName = userMods.FromWString(zoneInfo.zoneName)
+-- 		return zoneName
+-- 	end
+-- end
+
+function LeftClick( params )
+	if DnD:IsDragging() then return	end
+	common.UnRegisterReactionHandler( LeftClick, "LeftClick" )
+	wtButton:Show(false)
+	--mission.SetChatInputData( wtEditLine )
+	SendText(guildRecruitmentMessage)
+	--chat(2, "I clicked")	
+	RecruitmentReminderTimer()
+end
+function AOLocker(params)
+	if params.StatusDnD then
+		DnD:Enable( wtButton, false )
+	elseif not params.StatusDnD then
+		DnD:Enable( wtButton, true )
+	end
+end
+function SendText(text)
 	
+	mission.SetChatInputType( "zone" )
+	mission.SetChatInputText( userMods.ToWString(text), 0 )
+end
+-- function Currency()
+-- 	local ids = avatar.GetCategoryCurrencies( categoryId)
+-- 	if ids and ids[0] then
+-- 	  local info = avatar.GetCurrencyInfo( ids[0])
+-- 	  if info then
+-- 		local currentValue = info.value
+-- 	  end
+-- 	end
+-- end
+function Currencies()
+	-- local myrrhId = avatar.GetCurrencyId( "myrrh" )
+	-- --common.LogInfo("common","-"..tostring(myrrhId).."-")
+	-- if myrrhId then	  
+	-- local description = avatar.GetCurrencyDescription( myrrhId )
+	-- common.LogInfo("common","-"..tostring(description).."-")
+	-- --   if info then
+	-- -- 	local currentValue = info.value
+	-- -- 	common.LogInfo("common","-"..tostring(currentValue).."-")
+	-- --   end
+	-- end
+
+	local ids = avatar.GetCurrencies()
+	
+	if ids and ids[0] then
+		for i = 0, GetTableSize(ids) -1 do
+			local info = ids[i]:GetInfo()
+			--common.LogInfo("common","-"..tostring(info.name).."-")
+			--chat(2, i, userMods.FromWString( info.name))
+			if i == 110 then
+			--	local description = avatar.GetCurrencyDescription( info.category )
+				--chat(2, info)
+				local myrrhId = avatar.GetCurrencyId( userMods.FromWString(info.name) )
+				chat(2, myrrhId)
+				if myrrhId then
+				  local info = myrrhId:GetInfo()
+				  if info then
+					local currentValue = info.value
+				  end
+				end
+			end
+			
+		end
+	--   if info then
+	-- 	local currentValue = info.value
+	--   end
+	end
 end
 
 -- ||Maybe of use for later||

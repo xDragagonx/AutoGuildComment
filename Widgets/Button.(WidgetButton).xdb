@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WidgetButton>
+	<Variants>
+		<Item>
+			<TextFileRef href="ButtonTxt.txt" />
+			<Reaction>LeftClick</Reaction>
+		</Item>
+	</Variants>
+	<Name>Button</Name>
+	<Placement>
+		<X>
+			<Align>WIDGET_ALIGN_CENTER</Align>
+			<Pos>0</Pos>
+			<HighPos>0</HighPos>
+			<Size>180</Size>
+		</X>
+		<Y>
+			<Align>WIDGET_ALIGN_CENTER</Align>
+			<Pos>-100</Pos>
+			<HighPos>0</HighPos>
+			<Size>30</Size>
+		</Y>
+	</Placement>
+	<Header>
+		<Prototype href="../GuildBot/Widgets/EditorCommon/ButtonRegular2/ButtonRegular.Prototype.(WidgetButton).xdb" />
+	</Header>
+</WidgetButton>
