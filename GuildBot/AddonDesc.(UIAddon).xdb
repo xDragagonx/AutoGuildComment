@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<UIAddon>
-	<Name>GuildBot</Name>
-	<AutoStart>true</AutoStart>
-	<ScriptFileRefs>
-		<Item href="../SourceCode.lua" />
-	</ScriptFileRefs>
-	<Form href="Widgets/MainForm.(WidgetForm).xdb" />
-</UIAddon>

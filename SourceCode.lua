@@ -3,35 +3,31 @@
 --informs when you failed to ginv ppl by ignorance or afk.
 --adds guildMessage when guild levelled up to celebrate with guild.
 --adds guildMessage announcement when dominions are about to start, and repeats it several times over an hour
+--Remindes the user to world/zone shout recruitment for the guild at a click of a button.
 -------------------------------------------
 -- WIDGET
 local wtButton = mainForm:GetChildChecked("Button",false)
-wtButton:SetVal("button_label", userMods.ToWString("Copy guild recruitment message"))
+wtButton:SetVal("button_label", userMods.ToWString(locales["RecruitmentButtonText"])) --Text can be found in locales.lua
 wtButton:Show(false)
 
 -------------------------------------------
 local avatarId = nil
 local avatarName = nil
 local getAvatarIdCount = 0 --Used for counting how often it reloaded the function to assign an Id to the avatar.
-local guildTextDominion = userMods.ToWString(locales["DominionText"])
+local guildTextDominion = userMods.ToWString(locales["DominionPrepText"])
 local previousGuildMessage = nil --Placeholder for the previous guild's daily message.
 local currentGuildMessage = nil --Placeholder for the current guild's daily message.
 local seconds = 0
 local spamMessageCounter = 2
 local recruitCooldown = 10 --(1.5h 5400)
+local currentChatType = nil
 Global("guildRecruitmentMessage", nil)
-Global("reminderCooldown", 15) --15 is never used, was necesarry to avoid error.
+Global("reminderCooldown", 15) --15 is never used, was necesarry to avoid error. Somehow nil didn't work.
 
 function Main()
-	if avatar.IsExist then --Makes sure we get the id and name of the avatar (addon user).
-		avatarId = avatar.GetId()
-		avatarName = object.GetName(avatarId)
-	else
-		GetAvatarId()
-	end
+	GetAvatarId()
 	--GetEventsId()
 	--ChangeGUI()
-	Currencies()
 	common.RegisterEventHandler(EVENT_GUILD_DECLINE_BUSY, "EVENT_GUILD_DECLINE_BUSY") --https://alloder.pro/md/LuaApi/EventGuildDeclineBusy.html
 	common.RegisterEventHandler(EVENT_GUILD_DECLINE_IGNORED, "EVENT_GUILD_DECLINE_IGNORED") --https://alloder.pro/md/LuaApi/EventGuildDeclineIgnored.html
 	common.RegisterEventHandler(EVENT_GUILD_MEMBER_ADDED, "EVENT_GUILD_MEMBER_ADDED") --https://alloder.pro/md/LuaApi/EventGuildMemberAdded.html
@@ -42,7 +38,7 @@ function Main()
 	--common.RegisterEventHandler(EVENT_MISSION_RULE_REMOVED, "EVENT_MISSION_RULE_REMOVED") --https://alloder.pro/md/LuaApi/EventMissionRuleAdded.html Only works when daily reset removes calendar event
 	--common.RegisterEventHandler(EVENT_NEWS_POST_LOADED, "EVENT_NEWS_POST_LOADED") --https://alloder.pro/md/LuaApi/EventNewsPostLoaded.html Seems to not work for now. Awaiting feedback from Lafayette
 	--common.RegisterEventHandler(EVENT_NEWS_POST_SELECTED, "EVENT_NEWS_POST_SELECTED") --https://alloder.pro/md/LuaApi/EventNewsPostSelected.html Seems to not work for now. Awaiting feedback from Lafayette
-	--RecruitmentReminderTimer()	
+	RecruitmentReminderTimer()
 	DnD.Init(wtButton, nil, true)
 end
 -- function EVENT_NEWS_POST_SELECTED(params)
@@ -54,13 +50,12 @@ end
 -- function EVENT_NEWS_POST_LOADED(params)
 -- 	chat(3, "hello", params.ruleId)
 -- end
-function ChangeGUI()
+function ChangeGUI() --test function for widgets.
 	chat(2, "changing GUI")
-	
+	--widgetmagic 
 	chat(2, "I haven't crashed yet")
 end
-
-function GetEventsId()
+function GetEventsId() --testfunction to get calendar event Id's.
 	-- local newDailyMessage = userMods.ToWString("\nDear Avarice gamers,\nDominions are starting in less than 1 hour. Please prepare the following:\nPvP food of 10%'s | 3x3 vendor\nAlchemy potions +50 | Alchemy or playertrading, check Auction House\nPotents +40 | 3x3 vendor, Relic Master NPC\nMana Batteries | 3x3 vendor\nLegendary or Fabled Dragon Tears | Embrium vendor in Private Allod or at Auction House")
 	-- guild.SetMessage(newDailyMessage)
 
@@ -125,7 +120,6 @@ function EVENT_GUILD_MEMBER_REMOVED(params) --adds who left the guild into daily
 	local invitedId = params.id --guild member identifier (does not match the player identifier)
 	AddToGuildMessage(hasLeftName, 2)
 end
-
 function EVENT_MISSION_RULE_CHANGED(params) --rule stands for calendar events. It checks when a new event starts or ends from the calendar.
 	local ruleId = params.ruleId --We get the ruleId (ruleId) from the event trigger and..
 	local calendarEventId = rules.GetEventByRuleId( ruleId ) -- ..and convert the ruleId into an actual calendar Id (eventRuleId) to work with.
@@ -157,7 +151,6 @@ function EVENT_MISSION_RULE_CHANGED(params) --rule stands for calendar events. I
 		-- end
 	end
 end
-
 function SpamGuildMessage() --Function will run a timer and spam the guild message a few times.
 	--chat(2, "seconds:", seconds) --Logs the time passed.
 	common.LogInfo("common","-"..seconds.."-")
@@ -174,8 +167,7 @@ function SpamGuildMessage() --Function will run a timer and spam the guild messa
 		spamMessageCounter = spamMessageCounter - 1 --Subtract how many more times it will spam the message.
 	end
 end
-
-function GetAvatarId()
+function GetAvatarId() --gets our Id just so we can have our name in the guild comment as inviter.
 	while not avatarId do
 		getAvatarIdCount = getAvatarIdCount + 1 --Counts how often we had to loop before getting an Id for the avatar.
 		common.LogInfo("common", "-".."Got no avatarId, getting a new one | runtime"..getAvatarIdCount.."-")
@@ -183,7 +175,7 @@ function GetAvatarId()
 	end
 	avatarName = object.GetName(avatarId)
 end
-function AssignGuildRank(memberInfo, invitedId)
+function AssignGuildRank(memberInfo, invitedId) --Assigns guild rank based on the invited player's level.
 	--Automatically changes guild rank depending whether max level or not.
 	if memberInfo.level < 105 then
 		guild.ChangeRank( invitedId, 6 ) --https://alloder.pro/md/LuaApi/FunctionGuildChangeRank.html
@@ -191,23 +183,22 @@ function AssignGuildRank(memberInfo, invitedId)
 		guild.ChangeRank( invitedId, 5) --https://alloder.pro/md/LuaApi/FunctionGuildChangeRank.html
 	end
 end
-function AssignGuildComment(memberInfo, invitedId)
-	--Automatically adds comment to the newly joined guildmember.
-	if avatarId then
+function AssignGuildComment(memberInfo, invitedId) --Automatically adds comment to the newly joined guildmember.
+	local memberDescription = guild.GetMemberDescription( invitedId )
+	if not memberDescription:IsEmpty() then --Checks if the guild description is not empty
+	else --if it is empty, adds comment.
 		local descText = "Welcome mail sent to "..memberInfo.name.." lv"..tostring(memberInfo.level).." | invited by "..avatarName.." on "..memberInfo.joinTime.d.."/"..memberInfo.joinTime.m.."/"..memberInfo.joinTime.y
 		common.LogInfo("common", "-"..descText.."-")
 		guild.SetMemberDescription( invitedId, descText) --Add DescText to the guildmember comment.
-	-- else
-	-- 	GetAvatarId(memberInfo, invitedId)
 	end
 end
-function AssignGuildTabard(invitedId)
+function AssignGuildTabard(invitedId) --Gives guild tabard if available.
 	--Automatically gives regular tabard permission to the newly joined guildmember.
 	--Somehow this works as an officer, eventhough you need to be treasurer and above rank to hand out tabard.
 	if guild.CanDistributeTabard( invitedId ) then --https://alloder.pro/md/LuaApi/FunctionGuildCanDistributeTabard.html
 		guild.DistributeTabard( invitedId, ENUM_TabardType_Common )
 	else
-		chat(3, "There are no regular tabards left to give. Check if inactives can be reclaimed and assign them to the new guild member, please.")
+		chat(4, locales["NoTabardsLeft"])
 	end
 end
 function AddToGuildMessage(txt, number)
@@ -231,12 +222,10 @@ function ReturnGuildMessage()
 		guild.SetMessage(previousGuildMessage)
 		currentGuildMessage = guild.GetMessage()
 	else
-		chat(2, "No daily message stored to put back.")
+		chat(2, locales["ReturnGuildMessage"])
 	end
 end
--- I STOPPED HERE LKFNKDJSBGDJSBFJLDBFJLSNGFKJSDNGJLSDGNJKSGN;JSGNDJSGNSDGJSJGSDNJK
-
-function RecruitmentReminderTimer()
+function RecruitmentReminderTimer() --Starting function to start the cooldown timer and activating button for recruitment.
 	if recruitCooldown > 0 then
 	common.RegisterEventHandler(RecruitTimer, "EVENT_SECOND_TIMER") --https://alloder.pro/md/LuaApi/EventSecondTimer.html
 	elseif recruitCooldown <= 0 then
@@ -249,89 +238,54 @@ function RecruitmentReminderTimer()
 		--wtButton:SetClassVal( "button_style", "button_red" )		
 	end
 end
-function RecruitTimer()
-	chat(2, "recruitCooldown is", recruitCooldown)
+function RecruitTimer() --Timer to measure the cooldown for the recruitmentbutton.
+	--chat(2, "recruitCooldown is", recruitCooldown)
 	if recruitCooldown <= 0 then RecruitmentReminderTimer() end
 	recruitCooldown = recruitCooldown - 1
 end
--- function CheckZoneName()
--- 	local zoneName = nil
--- 	local zoneInfo = cartographer.GetCurrentZoneInfo()
--- 	if zoneInfo then
--- 		zoneName = userMods.FromWString(zoneInfo.zoneName)
--- 		return zoneName
--- 	end
--- end
-
-function LeftClick( params )
+function LeftClick( params ) --Function for when you leftclick the recruitmentbutton.
 	if DnD:IsDragging() then return	end
 	common.UnRegisterReactionHandler( LeftClick, "LeftClick" )
 	wtButton:Show(false)
 	--mission.SetChatInputData( wtEditLine )
 	SendText(guildRecruitmentMessage)
-	--chat(2, "I clicked")	
+	--mission.SetChatInputType( currentChatType ) --Can't use it because you need to wait for user to send message.	
 	RecruitmentReminderTimer()
 end
-function AOLocker(params)
+function AOLocker(params) --Function required for Drag and Dropping widgets.
 	if params.StatusDnD then
 		DnD:Enable( wtButton, false )
 	elseif not params.StatusDnD then
 		DnD:Enable( wtButton, true )
 	end
 end
-function SendText(text)
-	
-	mission.SetChatInputType( "zone" )
+function SendText(text) --Sends the preset text to recruit world or zone wide.
+	--currentChatType = mission.GetChatInput().sysCmdType --Can't use it because you need to wait for user to send message.
+	if HowManyAstralMegaphonesLeft() > 0 then
+		mission.SetChatInputType( "world" )
+	else
+		mission.SetChatInputType( "zone" )
+	end
 	mission.SetChatInputText( userMods.ToWString(text), 0 )
 end
--- function Currency()
--- 	local ids = avatar.GetCategoryCurrencies( categoryId)
--- 	if ids and ids[0] then
--- 	  local info = avatar.GetCurrencyInfo( ids[0])
--- 	  if info then
--- 		local currentValue = info.value
--- 	  end
--- 	end
--- end
-function Currencies()
-	-- local myrrhId = avatar.GetCurrencyId( "myrrh" )
-	-- --common.LogInfo("common","-"..tostring(myrrhId).."-")
-	-- if myrrhId then	  
-	-- local description = avatar.GetCurrencyDescription( myrrhId )
-	-- common.LogInfo("common","-"..tostring(description).."-")
-	-- --   if info then
-	-- -- 	local currentValue = info.value
-	-- -- 	common.LogInfo("common","-"..tostring(currentValue).."-")
-	-- --   end
-	-- end
-
-	local ids = avatar.GetCurrencies()
-	
-	if ids and ids[0] then
-		for i = 0, GetTableSize(ids) -1 do
-			local info = ids[i]:GetInfo()
-			--common.LogInfo("common","-"..tostring(info.name).."-")
-			--chat(2, i, userMods.FromWString( info.name))
-			if i == 110 then
-			--	local description = avatar.GetCurrencyDescription( info.category )
-				--chat(2, info)
-				local myrrhId = avatar.GetCurrencyId( userMods.FromWString(info.name) )
-				chat(2, myrrhId)
-				if myrrhId then
-				  local info = myrrhId:GetInfo()
-				  if info then
-					local currentValue = info.value
-				  end
-				end
-			end
-			
-		end
-	--   if info then
-	-- 	local currentValue = info.value
-	--   end
+function HowManyAstralMegaphonesLeft() --Checks if we got enough Megaphones left for recruiting via the button.
+	local currencyName = "Astral Megaphone"
+	local currencyId = GetCurrencyIdByName(currencyName)
+	local currencyValue = GetCurrencyValue(currencyId) or 0
+	--chat(2, "I have",currencyValue,"megaphones.")
+	return currencyValue
+end
+function GetCurrencyIdByName(currencyName) --Used for the HowManyAstralMegaphonesLeft function
+	local avatarCurrencies = avatar.GetCurrencies() or {}
+	for _, currencyId in pairs(avatarCurrencies) do 
+		local currencyInfo = currencyId:GetInfo() 
+		if currencyInfo and currencyInfo.name and userMods.FromWString(currencyInfo.name) == currencyName then return currencyId end 
 	end
 end
-
+function GetCurrencyValue(currencyId) --Used for the HowManyAstralMegaphonesLeft function
+	local currencyValue = avatar.GetCurrencyValue(currencyId)
+	if currencyValue then return currencyValue.value end
+end
 -- ||Maybe of use for later||
 -- function GetMemberDescrptn() --https://alloder.pro/md/LuaApi/FunctionGuildGetMemberDescription.html
 -- 	local memberDescription = guild.GetMemberDescription( memberId )

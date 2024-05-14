@@ -22,6 +22,6 @@
 		</Y>
 	</Placement>
 	<Header>
-		<Prototype href="../GuildBot/Widgets/EditorCommon/ButtonRegular2/ButtonRegular.Prototype.(WidgetButton).xdb" />
+		<Prototype href="EditorCommon/ButtonRegular2/ButtonRegular.Prototype.(WidgetButton).xdb" />
 	</Header>
 </WidgetButton>

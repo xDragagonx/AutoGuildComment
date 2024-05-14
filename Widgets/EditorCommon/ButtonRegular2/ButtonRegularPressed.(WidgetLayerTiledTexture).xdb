@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <WidgetLayerTiledTexture>
+	<Color>0xffffffff</Color>
+	<Grayed>false</Grayed>
+	<BlendEffect>BLEND_EFFECT_ALPHABLND</BlendEffect>
+	<flatPlacement>false</flatPlacement>
 	<textureItem href="ButtonRegularPressed.(UISingleTexture).xdb" />
 	<Layout>
 		<LeftX>32</LeftX>
@@ -9,8 +13,4 @@
 		<MiddleY>0</MiddleY>
 		<BottomY>0</BottomY>
 	</Layout>
-	<flatPlacement>false</flatPlacement>
-	<Color>0xffffffff</Color>
-	<Grayed>false</Grayed>
-	<BlendEffect>BLEND_EFFECT_ALPHABLND</BlendEffect>
 </WidgetLayerTiledTexture>

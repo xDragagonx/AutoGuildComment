@@ -13,7 +13,9 @@
 		<Item href="Libs/Widget.lua" />
 		<Item href="locales.lua" />
 		<Item href="SourceCode.lua" />
-		<Item href="Settings.lua" />	
+		<!-- <Item href="Script14.luac" /> -->
+		<!-- <Item href="Script15.luac" /> -->
+		<Item href="Settings.lua" />
 	</ScriptFileRefs>
 	<Form href="Widgets/MainForm.(WidgetForm).xdb" />
 </UIAddon>
