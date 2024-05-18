@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WidgetTextView>
+	<FormatFileRef href="HeaderText.txt" />
+	<TextValues>
+		<Item>
+			<Tag>window_header</Tag>
+			<TagValueFileRef href="../../MainPanelTxt.txt" />
+		</Item>
+	</TextValues>
+	<TextStyle>
+		<wrapText>false</wrapText>
+		<showClippedSymbol>false</showClippedSymbol>
+		<Align>ALIGNY_DEFAULT</Align>
+	</TextStyle>
+	<Name>HeaderText</Name>
+	<Priority>350</Priority>
+	<Placement>
+		<X>
+			<Align>WIDGET_ALIGN_BOTH</Align>
+			<Pos>48</Pos>
+			<HighPos>45</HighPos>
+			<Size>0</Size>
+		</X>
+		<Y>
+			<Pos>7</Pos>
+			<Size>22</Size>
+		</Y>
+	</Placement>
+	<TransparentInput>false</TransparentInput>
+</WidgetTextView>

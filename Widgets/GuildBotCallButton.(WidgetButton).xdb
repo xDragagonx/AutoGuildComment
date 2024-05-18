@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WidgetButton>
+	<Variants>
+		<Item>
+			<TextFileRef href="GuildBotCallButtonValue.txt" />
+			<Reaction>GuildBotCallButtonClick</Reaction>
+		</Item>
+	</Variants>
+	<Name>GuildBotCallButton</Name>
+	<Placement>
+		<X>
+			<Align>WIDGET_ALIGN_CENTER</Align>
+			<Pos>0</Pos>
+			<HighPos>0</HighPos>
+			<Size>50</Size>
+		</X>
+		<Y>
+			<Size>30</Size>
+		</Y>
+	</Placement>
+	<Header>
+		<Prototype href="EditorCommon/ButtonRegular2/ButtonRegular.Prototype.(WidgetButton).xdb" />
+	</Header>
+</WidgetButton>

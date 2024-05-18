@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WidgetTextView>
+	<FormatFileRef href="TextToRemove.txt" />
+	<TextValues>
+		<Item>
+			<Tag>value</Tag>
+			<TagValueFileRef href="TextToRemoveValue.txt" />
+		</Item>
+	</TextValues>
+	<TextStyle>
+		<Align>ALIGNY_MIDDLE</Align>
+	</TextStyle>
+	<Name>TextToRemove</Name>
+	<Priority>4500</Priority>
+	<Placement>
+		<X>
+			<Align>WIDGET_ALIGN_BOTH</Align>
+			<Sizing>WIDGET_SIZING_INTERNAL</Sizing>
+			<Pos>30</Pos>
+			<HighPos>230</HighPos>
+			<Size>0</Size>
+		</X>
+		<Y>
+			<Sizing>WIDGET_SIZING_INTERNAL</Sizing>
+			<Pos>60</Pos>
+		</Y>
+	</Placement>
+	<TransparentInput>false</TransparentInput>
+</WidgetTextView>

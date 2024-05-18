@@ -4,6 +4,8 @@
 	<Priority>4000</Priority>
 	<Children>
 		<Item href="Button.(WidgetButton).xdb" />
+		<Item href="MainPanel.(WidgetPanel).xdb" />
+		<Item href="GuildBotCallButton.(WidgetButton).xdb" />
 	</Children>
 	<Placement>
 		<X>

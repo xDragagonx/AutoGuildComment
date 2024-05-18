@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WidgetPanel>
+	<Name>MainPanel</Name>
+	<Priority>4000</Priority>
+	<Children>
+		<Item href="ContentFrameToRemove.(WidgetPanel).xdb" />
+		<Item href="TextToRemove.(WidgetTextView).xdb" />
+	</Children>
+	<Placement>
+		<X>
+			<Align>WIDGET_ALIGN_CENTER</Align>
+			<Size>400</Size>
+		</X>
+		<Y>
+			<Align>WIDGET_ALIGN_CENTER</Align>
+		</Y>
+	</Placement>
+	<Header>
+		<Prototype href="EditorCommon/Window/Window.Prototype.(WidgetPanel).xdb" />
+	</Header>
+</WidgetPanel>

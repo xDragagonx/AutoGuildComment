@@ -5,10 +5,38 @@
 --adds guildMessage announcement when dominions are about to start, and repeats it several times over an hour
 --Remindes the user to world/zone shout recruitment for the guild at a click of a button.
 -------------------------------------------
--- WIDGET
+-- WIDGETS
 local wtButton = mainForm:GetChildChecked("Button",false)
 wtButton:SetVal("button_label", userMods.ToWString(locales["RecruitmentButtonText"])) --Text can be found in locales.lua
 wtButton:Show(false)
+
+local wtGuildBotCallButton = mainForm:GetChildChecked("GuildBotCallButton",false)
+wtGuildBotCallButton:SetVal("button_label", userMods.ToWString("GB"))
+wtGuildBotCallButton:Show(true)
+
+local wtMainPanel = mainForm:GetChildChecked("MainPanel", false)
+wtMainPanel:Show(false)
+local TextToRemove = wtMainPanel:GetChildChecked("TextToRemove", false)
+--TextToRemove:SetVal("value", userMods.ToWString("To remove.."))
+local wtWindowHeader = wtMainPanel:GetChildChecked("WindowHeader", false)
+local wtHeaderText = wtWindowHeader:GetChildChecked("HeaderText", false)
+wtHeaderText:SetVal("window_header", userMods.ToWString("GuildBot"))
+--wtWindowHeader:Show(true)
+
+--local WidgetPanel = wtMainPanel:GetChildChecked("WidgetPanel", false)
+--WidgetPanel:Show(true)
+--local CornerCross = WidgetPanel:GetChildChecked("CornerCross", false)
+
+local wtContentFrameToRemove = wtMainPanel:GetChildChecked("ContentFrameToRemove", false)
+--wtContentFrameToRemove:Show(false)
+local wtItemToRemove = wtContentFrameToRemove:GetChildChecked("ItemToRemove", false)
+
+
+
+local wtButtonLeftToRemove = wtContentFrameToRemove:GetChildChecked("ButtonLeftToRemove", false)
+--wtButtonLeftToRemove:Show(false)
+local wtButtonRightToRemove = wtContentFrameToRemove:GetChildChecked("ButtonRightToRemove", false) -- Won't remove
+--wtButtonRightToRemove:Show(false)
 
 -------------------------------------------
 local avatarId = nil
@@ -20,7 +48,12 @@ local currentGuildMessage = nil --Placeholder for the current guild's daily mess
 local seconds = 0
 local spamMessageCounter = 2
 local recruitCooldown = 10 --(1.5h 5400)
-local currentChatType = nil
+local flag = false --Registers to show or hide the GUI GuildBot.
+local removalParameters = {} --Table of options for removal of tabards or members.
+removalParameters[0] = "Members"
+removalParameters[1] = "Tabards"
+local i = 0 --Index tracker for changing removalParameters.
+--local currentChatType = nil --No longer used as we had to wait for user to send message before being able to put it back to the original chatCmdSys (chattype)
 Global("guildRecruitmentMessage", nil)
 Global("reminderCooldown", 15) --15 is never used, was necesarry to avoid error. Somehow nil didn't work.
 
@@ -39,7 +72,10 @@ function Main()
 	--common.RegisterEventHandler(EVENT_NEWS_POST_LOADED, "EVENT_NEWS_POST_LOADED") --https://alloder.pro/md/LuaApi/EventNewsPostLoaded.html Seems to not work for now. Awaiting feedback from Lafayette
 	--common.RegisterEventHandler(EVENT_NEWS_POST_SELECTED, "EVENT_NEWS_POST_SELECTED") --https://alloder.pro/md/LuaApi/EventNewsPostSelected.html Seems to not work for now. Awaiting feedback from Lafayette
 	RecruitmentReminderTimer()
+	common.RegisterReactionHandler( GuildBotCallButtonClick, "GuildBotCallButtonClick" )
 	DnD.Init(wtButton, nil, true)
+	DnD.Init(wtGuildBotCallButton, nil, true)
+	DnD.Init(wtMainPanel, nil, true)
 end
 -- function EVENT_NEWS_POST_SELECTED(params)
 -- 	ruleId = params.ruleId
@@ -50,6 +86,47 @@ end
 -- function EVENT_NEWS_POST_LOADED(params)
 -- 	chat(3, "hello", params.ruleId)
 -- end
+
+function GuildBotCallButtonClick( params )
+	if DnD:IsDragging() then return	end
+	if flag == true then
+		wtMainPanel:Show(false)
+		flag = false
+		common.UnRegisterReactionHandler( ButtonLeftToRemoveClick, "ButtonLeftToRemoveClick" )
+		common.UnRegisterReactionHandler( ButtonRightToRemoveClick, "ButtonRightToRemoveClick" )
+	elseif flag == false then
+		wtMainPanel:Show(true)
+		flag = true
+		common.RegisterReactionHandler( ButtonLeftToRemoveClick, "ButtonLeftToRemoveClick" )
+		common.RegisterReactionHandler( ButtonRightToRemoveClick, "ButtonRightToRemoveClick" )
+		wtItemToRemove:SetVal("value", tostring(removalParameters[i]))
+	end
+end
+function ButtonLeftToRemoveClick(params)
+	chat(2,"left click")	
+	i = i - 1
+	if i < 0 then
+		i = GetMaxKey(removalParameters)
+	end
+	wtItemToRemove:SetVal("value", tostring(removalParameters[i]))
+end
+function ButtonRightToRemoveClick(params)
+	chat(2,"right click")
+	i = i + 1
+	if i > GetMaxKey(removalParameters) then
+		i = 0
+	end
+	wtItemToRemove:SetVal("value", tostring(removalParameters[i]))
+end
+function GetMaxKey(table)
+    local maxKey = -1
+    for k, v in pairs(table) do
+        if k > maxKey then
+            maxKey = k
+        end
+    end
+    return maxKey
+end
 function ChangeGUI() --test function for widgets.
 	chat(2, "changing GUI")
 	--widgetmagic 
@@ -258,18 +335,25 @@ function AOLocker(params) --Function required for Drag and Dropping widgets.
 	elseif not params.StatusDnD then
 		DnD:Enable( wtButton, true )
 	end
+
+	if params.StatusDnD then
+		DnD:Enable( wtGuildBotCallButton, false )
+	elseif not params.StatusDnD then
+		DnD:Enable( wtGuildBotCallButton, true )
+	end
 end
 function SendText(text) --Sends the preset text to recruit world or zone wide.
 	--currentChatType = mission.GetChatInput().sysCmdType --Can't use it because you need to wait for user to send message.
 	if HowManyAstralMegaphonesLeft() > 0 then
 		mission.SetChatInputType( "world" )
 	else
+		chat(4, locales["NoMegaphonesLeft"])
 		mission.SetChatInputType( "zone" )
 	end
 	mission.SetChatInputText( userMods.ToWString(text), 0 )
 end
 function HowManyAstralMegaphonesLeft() --Checks if we got enough Megaphones left for recruiting via the button.
-	local currencyName = "Astral Megaphone"
+	local currencyName = locales["Astral Megaphone"]
 	local currencyId = GetCurrencyIdByName(currencyName)
 	local currencyValue = GetCurrencyValue(currencyId) or 0
 	--chat(2, "I have",currencyValue,"megaphones.")
@@ -277,8 +361,8 @@ function HowManyAstralMegaphonesLeft() --Checks if we got enough Megaphones left
 end
 function GetCurrencyIdByName(currencyName) --Used for the HowManyAstralMegaphonesLeft function
 	local avatarCurrencies = avatar.GetCurrencies() or {}
-	for _, currencyId in pairs(avatarCurrencies) do 
-		local currencyInfo = currencyId:GetInfo() 
+	for _, currencyId in pairs(avatarCurrencies) do
+		local currencyInfo = currencyId:GetInfo()
 		if currencyInfo and currencyInfo.name and userMods.FromWString(currencyInfo.name) == currencyName then return currencyId end 
 	end
 end

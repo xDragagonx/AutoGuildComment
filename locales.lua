@@ -37,6 +37,18 @@ locales["rus"][ "ReturnGuildMessage" ] = "No daily message stored to put back."
 locales["ger"][ "ReturnGuildMessage" ] = "No daily message stored to put back."
 locales["tr"][ "ReturnGuildMessage" ] = "No daily message stored to put back."
 
+locales["eng_eu"][ "Astral Megaphone" ] =  "Astral Megaphone"
+locales["fr"][ "Astral Megaphone" ] =      "Astral Megaphone"
+locales["rus"][ "Astral Megaphone" ] =     "Astral Megaphone"
+locales["ger"][ "Astral Megaphone" ] =     "Astral Megaphone"
+locales["tr"][ "Astral Megaphone" ] =      "Astral Megaphone"
+
+locales["eng_eu"][ "NoMegaphonesLeft" ] =   "No Astral Megaphones available. Used /zone. Update your Astral Megaphones."
+locales["fr"][ "NoMegaphonesLeft" ] =       "No Astral Megaphones available. Used /zone. Update your Astral Megaphones."
+locales["rus"][ "NoMegaphonesLeft" ] =      "No Astral Megaphones available. Used /zone. Update your Astral Megaphones."
+locales["ger"][ "NoMegaphonesLeft" ] =      "No Astral Megaphones available. Used /zone. Update your Astral Megaphones."
+locales["tr"][ "NoMegaphonesLeft" ] =       "No Astral Megaphones available. Used /zone. Update your Astral Megaphones."
+
 
 
 locales = locales[common.GetLocalization()] -- trims all other languages except the one that common.getlocal got.

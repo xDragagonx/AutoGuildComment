@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WidgetButton>
+	<Variants>
+		<Item>
+			<Reaction>ButtonLeftToRemoveClick</Reaction>
+		</Item>
+	</Variants>
+	<Name>ButtonLeftToRemove</Name>
+	<Placement>
+		<X>
+			<Align>WIDGET_ALIGN_LOW</Align>
+		</X>
+	</Placement>
+	<Header>
+		<Prototype href="EditorCommon/ScrollBars/ButtonScrollLeft.Prototype.(WidgetButton).xdb" />
+	</Header>
+</WidgetButton>

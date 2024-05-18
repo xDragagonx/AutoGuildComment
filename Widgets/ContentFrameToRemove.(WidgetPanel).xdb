@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WidgetPanel>
+	<Name>ContentFrameToRemove</Name>
+	<Priority>1</Priority>
+	<Children>
+		<Item href="ButtonLeftToRemove.(WidgetButton).xdb" />
+		<Item href="ButtonRightToRemove.(WidgetButton).xdb" />
+		<Item href="ItemToRemove.(WidgetTextView).xdb" />
+	</Children>
+	<Placement>
+		<X>
+			<Align>WIDGET_ALIGN_LOW</Align>
+			<Pos>30</Pos>
+			<Size>140</Size>
+		</X>
+		<Y>
+			<Align>WIDGET_ALIGN_LOW</Align>
+			<Pos>80</Pos>
+			<Size>23</Size>
+		</Y>
+	</Placement>
+	<Header>
+		<Prototype href="EditorCommon/ContentFrame/ContentFrame.Prototype.(WidgetPanel).xdb" />
+	</Header>
+</WidgetPanel>

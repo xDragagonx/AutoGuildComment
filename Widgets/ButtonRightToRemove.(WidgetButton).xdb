@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WidgetButton>
+	<Variants>
+		<Item>
+			<Reaction>ButtonRightToRemoveClick</Reaction>
+		</Item>
+	</Variants>
+	<Name>ButtonRightToRemove</Name>
+	<Placement>
+		<X>
+			<Align>WIDGET_ALIGN_HIGH</Align>
+		</X>
+	</Placement>
+	<Header>
+		<Prototype href="EditorCommon/ScrollBars/ButtonScrollRight.Prototype.(WidgetButton).xdb" />
+	</Header>
+</WidgetButton>
