@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WidgetPanel>
+	<Name>ContentFrameToRemoveByTime</Name>
+	<Priority>1</Priority>
+	<Children>
+		<Item href="ButtonLeftToRemoveByTime.(WidgetButton).xdb" />
+		<Item href="ButtonRightToRemoveByTime.(WidgetButton).xdb" />
+		<Item href="InputTextToRemoveByTime.(WidgetEditLine).xdb" />
+	</Children>
+	<Placement>
+		<X>
+			<Pos>230</Pos>
+			<Size>140</Size>
+		</X>
+		<Y>
+			<Pos>80</Pos>
+			<Size>23</Size>
+		</Y>
+	</Placement>
+	<Header>
+		<Prototype href="EditorCommon/ContentFrame/ContentFrame.Prototype.(WidgetPanel).xdb" />
+	</Header>
+</WidgetPanel>

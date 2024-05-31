@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WidgetTextView>
-	<FormatFileRef href="ItemToRemove.txt" />
-	<Name>ItemToRemove</Name>
+	<FormatFileRef href="ItemToRemoveByTimePlaceholder.txt" />
+	<Name>ItemToRemoveByTimePlaceholder</Name>
 	<Placement>
 		<X>
 			<Align>WIDGET_ALIGN_BOTH</Align>
 			<Sizing>WIDGET_SIZING_INTERNAL</Sizing>
-			<Pos>30</Pos>
+			<Pos>0</Pos>
+			<HighPos>0</HighPos>
+			<Size>0</Size>
 		</X>
 		<Y>
-			<Align>WIDGET_ALIGN_HIGH</Align>
+			<Align>WIDGET_ALIGN_CENTER</Align>
 			<Sizing>WIDGET_SIZING_INTERNAL</Sizing>
+			<HighPos>0</HighPos>
 			<Size>0</Size>
 		</Y>
 	</Placement>
@@ -18,12 +21,7 @@
 	<TextValues>
 		<Item>
 			<Tag>value</Tag>
-			<TagValueFileRef href="ItemToRemoveValue.txt" />
+			<TagValueFileRef href="ItemToRemoveByTimeValuePlaceholder.txt" />
 		</Item>
 	</TextValues>
-	<TextStyle>
-		<wrapText>false</wrapText>
-		<showClippedSymbol>false</showClippedSymbol>
-		<Align>ALIGNY_MIDDLE</Align>
-	</TextStyle>
 </WidgetTextView>

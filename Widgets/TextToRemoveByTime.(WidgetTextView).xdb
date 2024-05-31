@@ -1,29 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WidgetTextView>
-	<FormatFileRef href="TextToRemove.txt" />
-	<Name>TextToRemove</Name>
+	<FormatFileRef href="TextToRemoveByTime.txt" />
+	<Name>TextToRemoveByTime</Name>
 	<Placement>
 		<X>
 			<Align>WIDGET_ALIGN_BOTH</Align>
 			<Sizing>WIDGET_SIZING_INTERNAL</Sizing>
-			<Pos>30</Pos>
-			<HighPos>230</HighPos>
-			<Size>0</Size>
+			<Pos>230</Pos>
+			<HighPos>30</HighPos>
 		</X>
 		<Y>
 			<Sizing>WIDGET_SIZING_INTERNAL</Sizing>
 			<Pos>60</Pos>
 		</Y>
 	</Placement>
-	<TransparentInput>false</TransparentInput>
+	<TransparentInput>true</TransparentInput>
 	<TextValues>
 		<Item>
 			<Tag>value</Tag>
-			<TagValueFileRef href="TextToRemoveValue.txt" />
+			<TagValueFileRef href="TextToRemoveByTimeValue.txt" />
 		</Item>
 	</TextValues>
-	<TextStyle>
-		<Align>ALIGNY_MIDDLE</Align>
-	</TextStyle>
 	<Priority>4500</Priority>
 </WidgetTextView>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WidgetButton>
+	<Variants>
+		<Item>
+			<TextFileRef href="ButtonRemoveMembersTabardsValue.txt" />
+			<Reaction>ButtonRemoveMembersTabardsClick</Reaction>
+		</Item>
+	</Variants>
+	<Name>ButtonRemoveMembersTabards</Name>
+	<Placement>
+		<X>
+			<Align>WIDGET_ALIGN_CENTER</Align>
+			<Size>350</Size>
+		</X>
+		<Y>
+			<Align>WIDGET_ALIGN_LOW</Align>
+			<Pos>110</Pos>
+			<Size>30</Size>
+		</Y>
+	</Placement>
+	<Header>
+		<Prototype href="EditorCommon/ButtonRegular2/ButtonRegular.Prototype.(WidgetButton).xdb" />
+	</Header>
+</WidgetButton>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WidgetEditLine>
+	<maxSymbolsCount>3</maxSymbolsCount>
+	<filterAlias>NUMBERS</filterAlias>
+	<placeholder href="ItemToRemoveByTimePlaceholder.(WidgetTextView).xdb" />
+	<Name>InputTextToRemoveByTime</Name>
+	<Placement>
+		<X>
+			<Align>WIDGET_ALIGN_LOW</Align>
+			<Pos>30</Pos>
+			<Size>80</Size>
+		</X>
+		<Y>
+			<Align>WIDGET_ALIGN_CENTER</Align>
+			<Size>20</Size>
+		</Y>
+	</Placement>
+	<Header>
+		<Prototype href="EditorCommon/EditLine/EditLine.Prototype.(WidgetEditLine).xdb" />
+	</Header>
+</WidgetEditLine>

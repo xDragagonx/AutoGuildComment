@@ -5,6 +5,9 @@
 	<Children>
 		<Item href="ContentFrameToRemove.(WidgetPanel).xdb" />
 		<Item href="TextToRemove.(WidgetTextView).xdb" />
+		<Item href="ContentFrameToRemoveByTime.(WidgetPanel).xdb" />
+		<Item href="TextToRemoveByTime.(WidgetTextView).xdb" />
+		<Item href="ButtonRemoveMembersTabards.(WidgetButton).xdb" />
 	</Children>
 	<Placement>
 		<X>

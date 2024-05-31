@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WidgetButton>
+	<Variants>
+		<Item>
+			<Reaction>ButtonLeftToRemoveByTimeClick</Reaction>
+		</Item>
+	</Variants>
+	<Name>ButtonLeftToRemoveByTime</Name>
+	<Header>
+		<Prototype href="EditorCommon/ScrollBars/ButtonScrollLeft.Prototype.(WidgetButton).xdb" />
+	</Header>
+</WidgetButton>

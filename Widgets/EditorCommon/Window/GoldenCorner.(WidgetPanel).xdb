@@ -6,9 +6,9 @@
 			<Pos>14</Pos>
 		</Y>
 	</Placement>
-	<Enabled>false</Enabled>
-	<fade>0</fade>
 	<Header>
 		<Prototype href="../CornerCross/GoldenCorner.Prototype.(WidgetPanel).xdb" />
 	</Header>
+	<Enabled>false</Enabled>
+	<fade>0</fade>
 </WidgetPanel>

@@ -5,7 +5,6 @@
 	<Children>
 		<Item href="HeaderText.(WidgetTextView).xdb" />
 	</Children>
-	<BackLayer href="TiledHeader.(WidgetLayerTiledTexture).xdb" />
 	<Placement>
 		<X>
 			<Align>WIDGET_ALIGN_BOTH</Align>
@@ -20,4 +19,5 @@
 	<Header>
 		<isPrototype>true</isPrototype>
 	</Header>
+	<BackLayer href="TiledHeader.(WidgetLayerTiledTexture).xdb" />
 </WidgetPanel>
