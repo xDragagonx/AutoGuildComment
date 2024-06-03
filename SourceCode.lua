@@ -18,7 +18,7 @@ wtGuildBotCallButton:Show(true)
 
 -- The GuildBot UI.
 local wtMainPanel = mainForm:GetChildChecked("MainPanel", false)
-wtMainPanel:Show(true) --CHANGE THIS TO FALSE TO HIDE ON STARTUP.
+wtMainPanel:Show(false) --Shows/hides Guildbot upon startup.
 local TextToRemove = wtMainPanel:GetChildChecked("TextToRemove", false) --Text indicator asking what to remove; tabards or members.
 --Accessing the text for the header of the addon.
 local wtWindowHeader = wtMainPanel:GetChildChecked("WindowHeader", false)
@@ -110,6 +110,9 @@ function GuildBotCallButtonClick( params ) --Opens and closes the GuildBot UI.
 		common.UnRegisterReactionHandler( ButtonRightToRemoveByTimeClick, "ButtonRightToRemoveByTimeClick" )
 		--RemovalButton
 		common.UnRegisterReactionHandler( ButtonRemoveMembersTabardsClick, "ButtonRemoveMembersTabardsClick" )
+		--Reactions for the InputTextToRemoveByTime.
+		common.UnRegisterReactionHandler( InputTextToRemoveByTime_ReactionEsc, "ReactionEsc" )
+		common.UnRegisterReactionHandler( InputTextToRemoveByTime_ReactionEnter, "ReactionEnter" )
 	elseif GuildBotOpen == false then
 		wtMainPanel:Show(true)
 		GuildBotOpen = true
@@ -122,13 +125,27 @@ function GuildBotCallButtonClick( params ) --Opens and closes the GuildBot UI.
 		wtItemToRemove:SetVal("value", tostring(removalParameters[removalParametersIndex]))
 		--RemovalButton
 		common.RegisterReactionHandler( ButtonRemoveMembersTabardsClick, "ButtonRemoveMembersTabardsClick" )
+		--Reactions for the InputTextToRemoveByTime.
+		common.RegisterReactionHandler( InputTextToRemoveByTime_ReactionEsc, "ReactionEsc" )
+		common.RegisterReactionHandler( InputTextToRemoveByTime_ReactionEnter, "ReactionEnter" )
 	end
+end
+function InputTextToRemoveByTime_ReactionEsc(params)
+	wtInputTextToRemoveByTime:SetFocus( false ) --Removes focus from widget, no more input. https://alloder.pro/md/LuaApi/FunctionWidgetSetFocus.html
+end
+function InputTextToRemoveByTime_ReactionEnter(params)
+	wtInputTextToRemoveByTime:SetFocus( false )
 end
 function ButtonRemoveMembersTabardsClick(params)
 	local removalSelected = removalParameters[removalParametersIndex]
 	local inactiveDaysSelected = tonumber(userMods.FromWString(wtInputTextToRemoveByTime:GetText())) --:GetText() returns WString so we unwrap it.
 	--chat(2, removalSelected, inactiveDaysSelected)
 	GuildInfo(inactiveDaysSelected)
+
+	-- if removalParameters[removalParametersIndex] == "Members" then
+		--LOL no api for removing members nor tabards. Awaiting for API expansion l m a o
+		--Keeping functionality in addon purely as informational.
+	-- end
 end
 function GuildInfo(inactiveDaysSelected)
 	local members = guild.GetMembers()
@@ -145,11 +162,14 @@ function GuildInfo(inactiveDaysSelected)
 			end
 		end
 	end --Loop ends
-	chat(2, removalCounter,"player(s) will get removed that are offline for over",inactiveDaysSelected,"days." )
+	ListPlayersToBeRemoved(removalCounter, inactiveDaysSelected, removalList)
+end
+function ListPlayersToBeRemoved(removalCounter, inactiveDaysSelected, removalList)
 	chat(2, "Players to be removed are:")
 	for _, pair in ipairs(removalList) do
 		chat(2, pair.key, pair.value)
 	end
+	chat(2, removalCounter,"player(s) will get removed that are offline for over",inactiveDaysSelected,"days." )
 end
 function CalcDateDiffInDays(currrentInMs, lastOnlineInMs)
 	local diffInDays = math.floor((currrentInMs - lastOnlineInMs) / 86400000) --Ms in a day (24h)

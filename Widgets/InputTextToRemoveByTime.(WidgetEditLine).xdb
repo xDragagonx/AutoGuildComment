@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WidgetEditLine>
+	<ReactionEnter>ReactionEnter</ReactionEnter>
+	<reactionDown>ReactionDownKeypad</reactionDown>
 	<maxSymbolsCount>3</maxSymbolsCount>
 	<filterAlias>NUMBERS</filterAlias>
 	<placeholder href="ItemToRemoveByTimePlaceholder.(WidgetTextView).xdb" />
+	<ReactionEsc>ReactionEsc</ReactionEsc>
 	<Name>InputTextToRemoveByTime</Name>
 	<Placement>
 		<X>

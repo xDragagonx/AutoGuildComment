@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WidgetPanel>
+	<BackLayer href="Frame.(WidgetLayerTiledTexture).xdb" />
 	<Placement>
 		<X>
 			<Size>384</Size>
@@ -11,5 +12,4 @@
 	<Header>
 		<isPrototype>true</isPrototype>
 	</Header>
-	<BackLayer href="Frame.(WidgetLayerTiledTexture).xdb" />
 </WidgetPanel>
